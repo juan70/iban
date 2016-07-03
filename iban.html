@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8">
+    <title>Cálculo IBAN</title>
+<style>
+  body {
+    background-color: #e0e0e0;
+  }
+  form {
+    float: left;
+  }
+</style>
+  </head>
+
+  <body onLoad="limpiarResultado()">
+  <!-- Big numbers library: https://github.com/MikeMcl/big.js/ -->
+  <script src="./big.min.js"></script>
+  <script>
+    function calcularIBAN() {
+      var pais = document.getElementById("pais").value.toUpperCase();
+      var ccc = document.getElementById("ccc1").value +
+                document.getElementById("ccc2").value +
+                document.getElementById("ccc3").value +
+                document.getElementById("ccc4").value;
+
+      var val1 = pais.charCodeAt(0) - "A".charCodeAt(0) + 10;
+      var val2 = pais.charCodeAt(1) - "A".charCodeAt(0) + 10;
+      var numcod = (val1 * 100 + val2) * 100;
+
+      var longnum = new Big(ccc + numcod.toString());
+      var cod = Big(98).minus(longnum.mod(97));
+
+      document.getElementById("resultado").innerHTML = pais + cod.toString() + " " +
+                                                       ccc.substr(0, 4) + " " +
+                                                       ccc.substr(4, 4) + " " +
+                                                       ccc.substr(8, 4) + " " +
+                                                       ccc.substr(12, 4) + " " +
+                                                       ccc.substr(16);
+    }
+
+    function limpiarResultado() {
+      document.getElementById("resultado").innerHTML = "XX00 0000 0000 0000 0000 0000";
+    }
+  </script>
+    <h1>Calcular Código IBAN</h1>
+    <form onReset="limpiarResultado()">
+      <fieldset>
+        <legend>País</legend>
+        <input type="text" id="pais" placeholder="ej: ES" maxlength="2" size="2" required accesskey="p">
+      </fieldset>
+      <fieldset>
+
+        <legend>Nº de cuenta</legend>
+         <input type="text" id="ccc1" placeholder="0000" maxlength="4" size="4" required accesskey="1">
+         <input type="text" id="ccc2" placeholder="0000" maxlength="4" size="4" required accesskey="2">
+         <input type="text" id="ccc3" placeholder="00" maxlength="2" size="2" required accesskey="3">
+         <input type="text" id="ccc4" placeholder="0000000000" maxlength="10" size="10" required accesskey="4">
+      </fieldset>
+      <button type="button" onClick="calcularIBAN()" accesskey="c">Calcular</button>
+      <button type="reset" accesskey="l">Limpiar</button>
+      <hr>
+
+      <fieldset>
+        <legend>Resultado</legend>
+        <p id="resultado">(el resultado se pintará en este espacio)</p>
+      </fieldset>
+    </form>
+  </body>
+</html>
