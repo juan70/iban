@@ -31,7 +31,8 @@
       var longnum = new Big(ccc + numcod.toString());
       var cod = Big(98).minus(longnum.mod(97));
 
-      document.getElementById("resultado").innerHTML = pais + cod.toString() + " " +
+      document.getElementById("resultado").innerHTML = pais +
+                                                       (cod.lt(10) ? "0" : "") + cod.toString() + " " +
                                                        ccc.substr(0, 4) + " " +
                                                        ccc.substr(4, 4) + " " +
                                                        ccc.substr(8, 4) + " " +
